@@ -10,6 +10,11 @@ on:
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+  permissions:
+  contents: read
+  issues: read
+  checks: write
+  pull-requests: write
 
 jobs:
   # This workflow contains a single job called "build"
@@ -30,6 +35,11 @@ jobs:
       - name: Prepend MATLAB to PATH on Linux
         if: runner.os == 'Linux'
         run: echo "/usr/local/MATLAB/R2024a/bin" >> $GITHUB_PATH
+      
+      - name: Start display server (required for building doc in MATLAB)
+        run: |
+          Xvfb :99 & 
+          echo "DISPLAY=:99" >> $GITHUB_ENV
 
       # Runs a set of commands using the runners shell
       - name: Run all tests
@@ -44,3 +54,11 @@ jobs:
       #  uses: matlab-actions/run-command@v1
       #  with:
       #    command: matlab-batch "disp('Running my custom testing procedure!'); addpath('code'); results = runtests('IncludeSubfolders', true); assertSuccess(results);"
+      - name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action/linux@v2
+        if: always()
+        with:
+            files: |
+            test-results/**/*.xml
+            test-results/**/*.trx
+            test-results/**/*.json
