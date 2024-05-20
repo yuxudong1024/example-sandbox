@@ -53,12 +53,11 @@ jobs:
       #- name: Run custom testing procedure
       #  uses: matlab-actions/run-command@v1
       #  with:
-      #    command: matlab-batch "disp('Running my custom testing procedure!'); addpath('code'); results = runtests('IncludeSubfolders', true); assertSuccess(results);"
+      #    command: matlab-batch "disp('Running my custom testing procedure!'); addpath('code'); results = runtests('IncludeSubfolders', true); assertSuccess(results);" 
       - name: Publish Test Results
         uses: EnricoMi/publish-unit-test-result-action/linux@v2
         if: always()
         with:
             files: |
-            test-results/**/*.xml
-            test-results/**/*.trx
-            test-results/**/*.json
+            test-results/*.xml
+            
