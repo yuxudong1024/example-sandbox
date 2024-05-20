@@ -22,20 +22,27 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       
       # Sets up MATLAB on the GitHub Actions runner
       #- name: Setup MATLAB
       #  uses: matlab-actions/setup-matlab@v1
 
+      # Setup MATLAB R2024b for Linux selfhosted runner
+       - name: Prepend MATLAB to PATH on Linux
+        if: runner.os == 'Linux'
+        run: echo "/usr/local/MATLAB/R2024a/bin" >> $GITHUB_PATH
+
       # Runs a set of commands using the runners shell
-      #- name: Run all tests
-      #  uses: matlab-actions/run-tests@v1
-      #  with:
-      #    source-folder: code
+      - name: Run all tests
+        uses: matlab-actions/run-tests@v2
+        with:
+          source-folder: code
+          test-results-junit: test-results/results.xml
+          code-coverage-cobertura: code-coverage/coverage.xml
 
       # You can use "run-command" to execute custom MATLAB scripts, functions, or statements.
-      - name: Run custom testing procedure
-        uses: matlab-actions/run-command@v1
-        with:
-          command: matlab-batch "disp('Running my custom testing procedure!'); addpath('code'); results = runtests('IncludeSubfolders', true); assertSuccess(results);"
+      #- name: Run custom testing procedure
+      #  uses: matlab-actions/run-command@v1
+      #  with:
+      #    command: matlab-batch "disp('Running my custom testing procedure!'); addpath('code'); results = runtests('IncludeSubfolders', true); assertSuccess(results);"
