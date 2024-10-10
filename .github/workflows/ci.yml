@@ -61,4 +61,15 @@ jobs:
         if: always()
         with:
             files: "test-results/*.xml"
+
+      # Copy by using scp to Raspberry Pi 5 Winston Yu hosted at winston.mathworks-workshop.com
+      - name: copy file via ssh password
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          source: "test-results/results.xml,code-coverage/coverage.xml"
+          target: /home/wyu/Upload
             
