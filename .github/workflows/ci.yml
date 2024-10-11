@@ -82,4 +82,4 @@ jobs:
           password: Matlab101
           port: 22
           source: "test-results/results.xml,code-coverage/coverage.xml"
-          target: /home/wyu/Upload
+          target: /mnt/nfs/resultcloud
