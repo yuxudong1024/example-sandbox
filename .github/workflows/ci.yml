@@ -50,36 +50,3 @@ jobs:
           source-folder: code
           test-results-junit: test-results/results.xml
           code-coverage-cobertura: code-coverage/coverage.xml
-
-      # You can use "run-command" to execute custom MATLAB scripts, functions, or statements.
-      #- name: Run custom testing procedure
-      #  uses: matlab-actions/run-command@v1
-      #  with:
-      #    command: matlab-batch "disp('Running my custom testing procedure!'); addpath('code'); results = runtests('IncludeSubfolders', true); assertSuccess(results);" 
-      - name: Publish Test Results
-        uses: EnricoMi/publish-unit-test-result-action/linux@v2
-        if: always()
-        with:
-            files: "test-results/*.xml"
-
-      # Copy by using scp to Raspberry Pi 5 Winston Yu hosted at winston.mathworks-workshop.com
-      # - name: copy file via ssh password
-      #   uses: appleboy/scp-action@v0.1.7
-      #   with:
-      #     host: ${{ secrets.HOST }}
-      #     username: ${{ secrets.USERNAME }}
-      #     password: ${{ secrets.PASSWORD }}
-      #     port: ${{ secrets.PORT }}
-      #     source: "test-results/results.xml,code-coverage/coverage.xml"
-      #     target: /home/wyu/Upload
-            
-      # Copy by using scp to Raspberry Pi 5 Winston Yu hosted at winston.mathworks-workshop.com
-      - name: copy file via ssh password
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: "winston.mathworks-workshop.com"
-          username: wyu
-          password: Matlab101
-          port: 22
-          source: "test-results/results.xml,code-coverage/coverage.xml"
-          target: /mnt/nfs/resultcloud
